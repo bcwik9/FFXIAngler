@@ -1,2 +1,2 @@
 # FFXIAngler
-Simply OpenCV based fishing bot for FFXI
+Simple OpenCV based fishing bot for FFXI
