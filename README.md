@@ -4,6 +4,10 @@ Simple OpenCV based fishing bot for FFXI
 
 ## Notes on usage
 
+- Run the bot with `py main.py`
+
+- Cancel bot by interupting (ctrl + c in the terminal window)
+
 - I am not a Python dev so this might be inefficient and ugly... but it works
 
 - Macros required: Ctrl + 1 = '/fishing'

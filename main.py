@@ -15,7 +15,7 @@ import random
 # I have tested this on private servers using 1280 * 720 windowed mode and it works without error until bait is completely used
 # I have only tested this at the Knightwell fishing for moat carp, other areas most likely work but haven't been tested and may need differing thresholds
 # Found it best to point the screen down at the feet of the char to minimise changing scenery in the background which may confuse the bot
-# Any improvements / feedback welcome, looking to add bait re-equipping in the future 
+# Any improvements / feedback welcome, looking to add bait re-equipping in the future
 
 # Change this to the title of your FFXI window, normally it is Character name
 ffxi_window_name = 'REPLACE ME'
@@ -45,12 +45,12 @@ def handle_logs():
         keyboard.press_and_release("esc")
         time.sleep(30)
         keyboard.press_and_release('ctrl+1')
-        global start_time 
+        global start_time
         start_time = time.time()
         logs.close
         return False
-    
-# Main loop   
+
+# Main loop
 while(True):
     # Failsafe to retry fishing again if nothing happens e.g. ('You give up')
     if (time.time() - start_time >= 35) and fishing == False:
@@ -75,7 +75,7 @@ while(True):
     locations_silver = np.where(result_silver <= threshold)
     locations_gold = list(zip(*locations_gold[::-1]))
     locations_silver = list(zip(*locations_silver[::-1]))
-    
+
     # get the x value on all locations
     loc = []
     if locations_gold:
@@ -94,7 +94,7 @@ while(True):
             fishing = True
         # Record succesful match
         last_results.append(1)
-        
+
         # Replace the 1280 with your screen width. e.g. for 1920 * 1080 choose 1920
         screen_width_half = (1280 / 2)
         if fishing:
@@ -123,11 +123,3 @@ while(True):
         time.sleep(30)
         keyboard.press_and_release('ctrl+1')
         start_time = time.time()
-
-    # press 'q' with the output window focused to exit.
-    # waits 1 ms every loop to process key presses
-    if cv.waitKey(1) == ord('q'):
-        cv.destroyAllWindows()
-        break
-
-print('Done.')
