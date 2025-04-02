@@ -4,21 +4,22 @@ Simple OpenCV based fishing bot for FFXI
 
 ## Notes on usage
 
-- Run the bot with `py main.py`
+- Download this repository
+
+- Copy `settings.example.yml` file to `settings.yml`, and change the required values such as your FFXI window name and screen width
+
+- Run the bot with `py main.py` or `python3 main.py`
+  - You may have to install dependencies such as `pip install pyyaml`
 
 - Cancel bot by interupting (ctrl + c in the terminal window)
 
-- I am not a Python dev so this might be inefficient and ugly... but it works
-
-- Macros required: Ctrl + 1 = '/fishing'
+- Macros required:
+  - Ctrl + 1 = '/fishing'
+  - Ctrl + 2 = '/equip Ammo "<YOUR BAIT HERE>"'
 
 - As the bot reads the chat log to release monsters/items Ashita Logs plugin is necessary: <https://docsv3.ashitaxi.com/addons/logs>
 
-- Again as the bot looks at the last 2 lines of the log try to minimise log spam (filter chat) and unequip linkshell is recommended
-
 - I have tested this on private servers using 1280 * 720 windowed mode and it works without error until bait is completely used
-
-- I have only tested this at the Knightwell fishing for moat carp, other areas most likely work but haven't been tested and may need differing thresholds
 
 - Found it best to point the screen down at the feet of the char to minimise changing scenery in the background which may confuse the bot
 
@@ -26,6 +27,6 @@ Simple OpenCV based fishing bot for FFXI
 
 ## Thanks
 
-Massive thanks to https://www.youtube.com/@LearnCodeByGaming for the great beginners guide to making OpenCV bots for games.
+Big thanks to [Gakkun89](https://github.com/Gakkun89) for their original work on this bot.
 
 Windowcapture code taken from: https://github.com/learncodebygaming/opencv_tutorials
