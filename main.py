@@ -166,7 +166,7 @@ def handle_logs(skip_actions=False):
     no_bait = b'You can\'t fish without bait on the hook.'
     no_bait_check = no_bait in searchable_new_messages
     if no_bait_check:
-        print('No bait, tryint to equip more with CTRL+2')
+        print('No bait, trying to equip more with CTRL+2')
         focus_window()
         send_keypress('esc')
         time.sleep(0.5)
