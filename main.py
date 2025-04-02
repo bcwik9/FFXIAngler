@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from windowcapture import WindowCapture
 import keyboard
-import functools
+#import functools
 import random
 import win32gui
 import yaml
@@ -21,7 +21,6 @@ import yaml
 # <PLAYERNAME> caught a crayfish!
 # You give up and reel in your line.
 # You don't know how much longer you can keep this one on the line...
-# You cannot fish here.
 # You didn't catch anything.
 # <PLAYERNAME> caught a crayfish, but cannot carry any more items.
 # <PLAYERNAME> regretfully releases
@@ -112,6 +111,14 @@ def handle_logs(skip_actions=False):
         print('*** INVENTORY FULL - EXITING ***')
         send_keypress('esc')
         exit()
+
+    cant_fish_here = b'You cannot fish here'
+    cant_fish_here_check = cant_fish_here in searchable_new_messages
+    if cant_fish_here_check:
+        print('*** NOT IN A FISHABLE AREA - EXITING ***')
+        send_keypress('esc')
+        exit()
+        
 
     monster = b'ferociously!'
     monster_check = monster in searchable_new_messages
