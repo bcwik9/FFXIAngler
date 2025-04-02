@@ -15,7 +15,7 @@ Simple OpenCV based fishing bot for FFXI
 
 - Macros required:
   - Ctrl + 1 = '/fishing'
-  - Ctrl + 2 = '/equip Ammo "<YOUR BAIT HERE>"'
+  - Ctrl + 2 = '/equip Ammo "YOUR BAIT"'
 
 - As the bot reads the chat log to release monsters/items Ashita Logs plugin is necessary: <https://docsv3.ashitaxi.com/addons/logs>
 
