@@ -11,7 +11,11 @@ Simple OpenCV based fishing bot for FFXI
 - Run the bot with `py main.py` or `python3 main.py`
   - You may have to install dependencies such as `pip install pyyaml`
 
+- Bot requires the FFXI window to be in focus (ie. you can't run this in the background)
+
 - Cancel bot by interupting (ctrl + c in the terminal window)
+
+- If bot is not reliably catching fish, try repositioning your camera and restarting the bot
 
 - Macros required:
   - Ctrl + 1 = `/fishing`
