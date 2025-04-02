@@ -57,6 +57,7 @@ state = {
     'allow_items': settings.get('allow_items', False) == True,
     'last_message_read': None,
     'last_arrow_found_at': None,
+    'last_fish_on_line_at': None,
     # Lower this value if you get lots of false positives
     # Raise this value if you get no matches
     'threshold': 0.017
@@ -135,6 +136,7 @@ def handle_logs():
         print('Fish on line')
         state['fish_on_line'] = True
         state['fishing'] = False
+        state['last_fish_on_line_at'] = time.time()
         state['last_arrow_found_at'] = time.time()
         logs.close()
         return
@@ -251,8 +253,20 @@ state['fish_on_line'] = False
 
 # Main loop
 while(True):
+    # Fish!
     if not state['fishing'] and not state['fish_on_line']:
         cast()
+
+    # Make sure we haven't been fishing for too long
+    if state['fish_on_line'] and state['last_fish_on_line_at'] and (time.time() - state['last_fish_on_line_at']) >= 28:
+        print("**Issue detected**: Fishing too long.")
+        send_keypress("enter")
+        time.sleep(2)
+        send_keypress("esc")
+        time.sleep(1)
+        state['fish_on_line'] = False
+        state['fishing'] = False
+        calibrate_sensitivity()
 
     # Check logs if we're fishing for messages
     if state['fishing'] and not state['fish_on_line']:
