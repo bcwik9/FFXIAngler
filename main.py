@@ -24,6 +24,7 @@ import yaml
 # You cannot fish here.
 # You didn't catch anything.
 # <PLAYERNAME> caught a crayfish, but cannot carry any more items.
+# <PLAYERNAME> regretfully releases
 
 # Load settings from settings.yml
 with open('settings.yml', 'r') as file:
@@ -71,7 +72,7 @@ if hwnd == 0:
     raise Exception(f"Window with title '{ffxi_window_name}' not found")
 
 # Skip monsters, items, and other stuff by reading logs
-def handle_logs():
+def handle_logs(skip_actions=False):
     logs = open(path + file_name, 'rb')
     log_lines = [line.decode('utf-8', errors='ignore') for line in logs.readlines()[-10::]]
 
@@ -92,12 +93,26 @@ def handle_logs():
 
     state['last_message_read'] = log_lines[-1]
 
+    # Return if we were only setting up messages
+    if skip_actions:
+        logs.close()
+        return
+
     # Return if there's nothing new
     if not new_messages:
         logs.close()
         return
 
+    # Iterate though messages and make them searchable
     searchable_new_messages = b''.join([line.encode('utf-8') for line in new_messages])
+
+    inventory_full = f"{ffxi_window_name} regretfully releases".encode('utf-8')
+    inventory_full_check = inventory_full in searchable_new_messages
+    if inventory_full_check:
+        print('*** INVENTORY FULL - EXITING ***')
+        send_keypress('esc')
+        exit()
+
     monster = b'ferociously!'
     monster_check = monster in searchable_new_messages
     item = b'pulling'
@@ -153,7 +168,7 @@ def handle_logs():
         state['fish_on_line'] = False
         logs.close()
         return
-
+    
 def cast():
     if not state['fishing']:
         print("Casting with CTRL+1")
@@ -240,12 +255,8 @@ print(f"Calibrated threshold: {state['threshold']}")
 while(False):
     print(f"{check_for_fish_arrows()}")
 
-#exit()
-
 # set up logs
-print("*** Setting up logs, ignore the following messages ****")
-handle_logs()
-print("*** Finished setting up logs ****")
+handle_logs(True)
 
 # reset vars
 state['fishing'] = False
@@ -257,7 +268,7 @@ while(True):
     if not state['fishing'] and not state['fish_on_line']:
         cast()
 
-    # Make sure we haven't been fishing for too long
+    # Make sure we haven't been trying to catch a fish for too long
     if state['fish_on_line'] and state['last_fish_on_line_at'] and (time.time() - state['last_fish_on_line_at']) >= 28:
         print("**Issue detected**: Fishing too long.")
         send_keypress("enter")
@@ -269,8 +280,8 @@ while(True):
         calibrate_sensitivity()
 
     # Check logs if we're fishing for messages
-    if state['fishing'] and not state['fish_on_line']:
-        handle_logs()
+    #if state['fishing'] and not state['fish_on_line']:
+    handle_logs()
 
     loc = check_for_fish_arrows()
     #print(f"LOC: {loc == []} ({loc})")
