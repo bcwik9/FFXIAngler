@@ -10,6 +10,7 @@ Simple OpenCV based fishing bot for FFXI
 
 - Run the bot with `py main.py` or `python3 main.py`
   - You may have to install dependencies such as `pip install pyyaml`
+  - If FFXI is not doing anything, you may have to run the script as an administrator. Open your command terminal using "Run as an administrator" then run the script.
 
 - Bot requires the FFXI window to be in focus (ie. you can't run this in the background)
 
