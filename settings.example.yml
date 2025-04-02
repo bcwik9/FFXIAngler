@@ -1,0 +1,13 @@
+# settings.yml
+# Configuration settings for FFXIAngler application
+
+# Replace this with your FFXI window name (generally your character name)
+ffxi_window_name: "Your character name"
+# Path to chat logs directory from Ashita
+chat_log_path: 'F:\HorizonXI\Game\chatlogs'
+# Screen width of FFXI window
+screen_width: 1280
+# Allow monsters to be caught
+allow_monsters: false
+# Allow items to be caught
+allow_items: false

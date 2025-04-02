@@ -18,6 +18,7 @@ class WindowCapture:
 
     # constructor
     def __init__(self, window_name):
+        #self.list_window_names()
         # find the handle for the window we want to capture
         self.hwnd = win32gui.FindWindow(None, window_name)
         if not self.hwnd:
