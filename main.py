@@ -8,6 +8,7 @@ import keyboard
 import random
 import win32gui
 import yaml
+import playsound
 
 
 # Notes on usage #
@@ -24,6 +25,8 @@ import yaml
 # You didn't catch anything.
 # <PLAYERNAME> caught a crayfish, but cannot carry any more items.
 # <PLAYERNAME> regretfully releases
+# <PLAYERNAME>'s fishing skill rises 0.1 points.
+# use /sigh when inventory is full
 
 # Load settings from settings.yml
 with open('settings.yml', 'r') as file:
@@ -111,15 +114,18 @@ def handle_logs(skip_actions=False):
     if inventory_full_check:
         print('*** INVENTORY FULL - EXITING ***')
         send_keypress('esc')
+        sound_alarm()
         exit()
+        # TODO: logout?
 
     cant_fish_here = b'You cannot fish here'
     cant_fish_here_check = cant_fish_here in searchable_new_messages
     if cant_fish_here_check:
         print('*** NOT IN A FISHABLE AREA - EXITING ***')
         send_keypress('esc')
+        sound_alarm()
         exit()
-        
+        # TODO: logout?
 
     monster = b'ferociously!'
     monster_check = monster in searchable_new_messages
@@ -131,7 +137,7 @@ def handle_logs(skip_actions=False):
     no_catch_check = no_catch in searchable_new_messages
     lost_catch = b'You lost your catch.'
     lost_catch_check = lost_catch in searchable_new_messages
-    gave_up = b'You give up.'
+    gave_up = b'You give up'
     gave_up_check = gave_up in searchable_new_messages
     
     if (monster_check and not state['allow_monsters']) or (item_check and not state['allow_items']) or terrible_check or no_catch_check or lost_catch_check or gave_up_check:
@@ -173,6 +179,18 @@ def handle_logs(skip_actions=False):
         time.sleep(0.5)
         send_keypress('ctrl+2')
         state['fishing'] = False
+        state['fish_on_line'] = False
+        logs.close()
+        return
+
+    # Check if fish was caught. If so, display the name of the fish
+    caught_fish = f"{ffxi_window_name} caught a ".encode('utf-8')
+    caught_fish_check = caught_fish in searchable_new_messages
+    if caught_fish_check:
+        # Get the fish name from the message
+        fish_name = searchable_new_messages.split(caught_fish)[1].split(b'!')[0].decode('utf-8')
+        print(f"Caught a {fish_name}")
+        #state['fishing'] = False
         state['fish_on_line'] = False
         logs.close()
         return
@@ -252,6 +270,11 @@ def calibrate_sensitivity():
                 #state['threshold'] += 0.001
 
     send_keypress('esc')
+
+def sound_alarm():
+    # Play an audible sound a few times
+    for _ in range(5):
+        playsound.playsound('notification.mp3')
 
 
 ### START ###
