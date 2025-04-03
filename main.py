@@ -57,6 +57,7 @@ state = {
     'allow_items': settings.get('allow_items', False) == True,
     'last_message_read': None,
     'last_arrow_found_at': None,
+    'last_cast_at': None,
     'last_fish_on_line_at': None,
     # Lower this value if you get lots of false positives
     # Raise this value if you get no matches
@@ -181,10 +182,11 @@ def cast():
         print("Casting with CTRL+1")
         focus_window()
         send_keypress('esc')
-        time.sleep(6)
+        time.sleep(5)
         send_keypress('ctrl+1')
         state['fishing'] = True
         state['fish_on_line'] = False
+        state['last_cast_at'] = time.time()
         #calibrate_sensitivity()
 
 def send_keypress(key):
@@ -275,8 +277,16 @@ while(True):
     if not state['fishing'] and not state['fish_on_line']:
         cast()
 
+    # Make sure we haven't been waiting for a fish to bite too long
+    if state['fishing'] and not state['fish_on_line'] and (time.time() - state['last_cast_at']) >= 30:
+        print("**Issue detected**: Waiting for bite too long. Recasting.")
+        send_keypress("esc")
+        time.sleep(1)
+        state['fishing'] = False
+        state['fish_on_line'] = False
+
     # Make sure we haven't been trying to catch a fish for too long
-    if state['fish_on_line'] and state['last_fish_on_line_at'] and (time.time() - state['last_fish_on_line_at']) >= 28:
+    if state['fish_on_line'] and state['last_fish_on_line_at'] and (time.time() - state['last_fish_on_line_at']) >= 26:
         print("**Issue detected**: Fishing too long.")
         send_keypress("enter")
         time.sleep(2)
