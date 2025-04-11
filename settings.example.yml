@@ -11,3 +11,30 @@ screen_width: 1280
 allow_monsters: false
 # Allow items to be caught
 allow_items: false
+# If we have a fish on the line and time is about to run out, try to catch the fish.
+# This might happen if the calibration threshold is off and it thinks fishing arrows are present, when they aren't.
+# Turn this off if the fish you are attempting to catch are difficult and using a lure, because if you try to reel in a fish
+# that isn't ready, you can lose your lure.
+attempt_to_catch_too_long: false
+# Log off after certain period of time (in minutes)
+# Set to 0 to disable
+max_time_limit: 300
+
+
+### DANGEROUS ###
+# These settings will automatically delete items from your inventory.
+# This is mainly good for trying to catch fish that don't stack (ie. Giant Catfish), and trying to get skillups (ie. you don't care about selling the fish).
+# IMPORTANT: You must make sure your keybinds are set up correctly to avoid losing items:
+# ctrl+i - open inventory
+# i - menu up
+# k - menu down
+# l - menu page down
+# IMPORTANT: Must disable auto inventory sorting, so most recent items are last (at bottom) in inventory.
+# Always double-check your inventory space before starting the bot.
+# Allow inventory items to be deleted when inventory is full
+allow_delete_items: false
+# Number of items to delete when inventory is full
+num_items_to_delete: 1
+# Number of castches to wait to delete items. Set to '0' to disable, and only delete when inventory is full.
+# Must be greater than num_items_to_delete, or you would be deleting your actual inventory, not your catches.
+delete_item_catch_interval: 0
