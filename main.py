@@ -31,6 +31,7 @@ import os
 # <PLAYERNAME>'s fishing skill reaches level 13.
 # This strength... You get the sense that you are on the verge of an epic catch!
 # You can't fish without a rod in your hands.
+# You can't fish at the moment.
 # use /sigh when inventory is full
 # alert if taking damage
 # Whatever caught the hook was too small to catch with this rod.
@@ -366,6 +367,7 @@ def calibrate_sensitivity():
     if state['threshold'] > 0.01:
       state['threshold'] -= 0.006
 
+    print(f"Calibrated threshold: {state['threshold']}")
     send_keypress('esc')
 
 def sound_alarm():
@@ -415,9 +417,8 @@ def delete_items():
     # Delete items from the inventory.
     # IMPORTANT: Must disable auto inventory sorting, so
     # most recent items are last (at bottom) in inventory.
-    focus_window()
     print("Deleting items")
-    time.sleep(5)
+    time.sleep(6)
     # open inventory window
     for _ in range(2):
         send_keypress('esc')
@@ -465,7 +466,6 @@ focus_window()
 
 # calibrate screen sensitivity
 calibrate_sensitivity()
-print(f"Calibrated threshold: {state['threshold']}")
 while(False):
     print(f"{check_for_fish_arrows()}")
 
