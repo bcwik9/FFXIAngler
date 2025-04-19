@@ -4,7 +4,6 @@ import time
 from datetime import datetime
 from windowcapture import WindowCapture
 import keyboard
-#import functools
 import random
 import win32gui
 import yaml
@@ -71,6 +70,7 @@ state = {
     'num_items_to_delete': int(settings.get('num_items_to_delete', 1)),
     'chat_log_file_name': '',
     'last_message_read': None,
+    'skip_first_log_line': False,
     'last_arrow_found_at': None,
     'last_cast_at': None,
     'last_fish_on_line_at': None,
@@ -104,6 +104,7 @@ def handle_logs(skip_actions=False):
     log_lines = [line.decode('utf-8', errors='ignore') for line in logs.readlines()[-10::]]
     logs.close()
 
+    # Check to see if log name changed
     if state['chat_log_file_name'] != file_name:
         # new day, new chat log
         state['chat_log_file_name'] = file_name
@@ -122,9 +123,19 @@ def handle_logs(skip_actions=False):
             continue
 
         if last_line_found:
-            new_messages.append(line)
+            if state['skip_first_log_line']:
+                state['skip_first_log_line'] = False
+                continue
+            else:
+                new_messages.append(line)
 
-    state['last_message_read'] = log_lines[-1]
+    # store last message we processed
+    # make sure it has a timestamp, otherwise use second-to-last line
+    if log_lines[-1][0] == '[':
+        state['last_message_read'] = log_lines[-1]
+    else:
+        state['last_message_read'] = log_lines[-2]
+        state['skip_first_log_line'] = True
 
     # Return if we were only setting up messages
     if skip_actions:
@@ -326,6 +337,11 @@ def check_for_fish_arrows():
     locations_silver = np.where(result_silver <= state['threshold'])
     locations_gold = list(zip(*locations_gold[::-1]))
     locations_silver = list(zip(*locations_silver[::-1]))
+
+    if len(locations_silver) > 0:
+        print(f"SILVER DEBUG: x={locations_silver[0][0]}, y={locations_silver[0][1]}")
+    if len(locations_gold) > 0:
+        print(f"GOLD DEBUG: x={locations_gold[0][0]}, y={locations_gold[0][1]}")
 
     # get the x value on all locations
     loc = []
@@ -546,6 +562,8 @@ while(True):
         send_keypress("enter")
         time.sleep(0.2)
         send_keypress("enter")
+        time.sleep(0.2)
+        send_keypress('y')
         state['fish_on_line'] = False
         state['fishing'] = False
         time.sleep(2)
